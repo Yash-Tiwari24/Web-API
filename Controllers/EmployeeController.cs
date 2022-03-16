@@ -20,7 +20,7 @@ namespace Web_API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
             List<Employee> employees = _employee.GetEmployees();
             return Ok(employees);
