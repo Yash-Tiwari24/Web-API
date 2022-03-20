@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
@@ -28,14 +29,23 @@ namespace Web_API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddTransient<IEmployee, EmployeeRepository>();  
-
-            //services.AddSingleton<IEmployee, EmployeeRepository>();
+            services.AddControllers();
+          
 
             services.AddScoped<IEmployee, EmployeeRepository>();
             services.AddScoped<ICustomer, CustomerRepository>();
+            services.AddScoped<IOrders, OrderRepository>();
+            
+            services.AddScoped<IOperationScoped, Operation>();
+            services.AddTransient<IOperationTransient, Operation>();
+            services.AddSingleton<IOperationSingleton, Operation>();
 
-            services.AddControllers();
+            services.AddSingleton<IOperationSingletonInstance>(a=>new Operation(Guid.Empty));
+            services.TryAddSingleton<IOperationSingletonInstance>(a => new Operation());
+            services.AddTransient<DependencyService1, DependencyService1>();
+            services.AddTransient<DependencyService2, DependencyService2>();
+
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Web_API", Version = "v1" });

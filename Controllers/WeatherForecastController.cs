@@ -17,23 +17,32 @@ namespace Web_API.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly DependencyService1 _dependencyService1;
+        private readonly DependencyService2 _dependencyService2;
+        private readonly IEnumerable<IOperationSingletonInstance> _allSingletonInstances;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+
+
+        public WeatherForecastController(ILogger<WeatherForecastController> logger,
+            DependencyService1 dependencyService1,
+            DependencyService2 dependencyService2,
+             IEnumerable<IOperationSingletonInstance> allSingletonInstances)
         {
+            _dependencyService1 = dependencyService1;
+            _dependencyService2 = dependencyService2;
+            _allSingletonInstances = allSingletonInstances;
             _logger = logger;
         }
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            _dependencyService1.Write();
+            _dependencyService2.Write();
+            foreach (var instance in _allSingletonInstances)
+                Console.WriteLine(instance.OperationId);
+
+            return Enumerable.Empty<WeatherForecast>();
         }
     }
 }
