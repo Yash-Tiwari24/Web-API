@@ -7,7 +7,7 @@ namespace Web_API.Models
 {
     public class Orders
     {
-        public float OrderID { get; set; }
+        public int OrderID { get; set; }
         public float CustomerID { get; set; }
         public float EmployeeID { get; set; }
         public DateTime OrderDate { get; set; }

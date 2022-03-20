@@ -34,7 +34,7 @@ namespace Web_API.Repository
             using (var connection=new SqlConnection(_connectionString))
             {
                 var sqlQuery = "delete from Orders where OrderID=@OrderID";
-                connection.Execute(sqlQuery, Id);
+                connection.Execute(sqlQuery,new { OrderID =Id});
 
             }
         }
@@ -54,7 +54,7 @@ namespace Web_API.Repository
             using(var connection=new SqlConnection(_connectionString))
             {
                 var sqlQuery = "select *from Orders where OrderID=@OrderID";
-                return connection.QueryFirst(sqlQuery,Id);
+                return connection.QueryFirstOrDefault<Orders>(sqlQuery, new { OrderID = Id });
             }
         }
 
